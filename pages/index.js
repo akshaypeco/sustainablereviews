@@ -6,11 +6,12 @@ import { MdCancel } from "react-icons/md";
 import { BsFillCaretDownFill } from "react-icons/bs";
 import { BsFillCaretUpFill } from "react-icons/bs";
 import axios from "axios";
+import Spinner from "../comps/spinner";
 
 export default function Home() {
   const [votes, setVotes] = useState(0);
   const [filterArray, setFilterArray] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState(false);
   const [searchRes, setSearchRes] = useState([]);
   const [filterRes, setFilterRes] = useState([]);
@@ -33,41 +34,37 @@ export default function Home() {
   const [store, setStore] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchData = async () => {
-      if (searchRes.length == 0) {
-        await axios
-          .get("/api/allSubmissions")
-          .then((response) => {
+      await axios
+        .get("/api/allSubmissions")
+        .then((response) => {
+          setTimeout(() => {
             setAllRes(response.data.submissions);
             setFilterRes(response.data.submissions);
-          })
-          .catch((err) => {
-            if (err.response) {
-              // client received an error response (5xx, 4xx)
-              console.log("5xx, 4xx error");
-            } else if (err.request) {
-              // client never received a response, or request never left
-              console.log(
-                "client never received response, or request never left"
-              );
-            } else {
-              // anything else
-              console.log(err);
-              console.log("other error");
-            }
-          });
-      } else {
-        setAllRes(searchRes);
-      }
+            setIsLoading(false);
+          }, 1000);
+        })
+        .catch((err) => {
+          if (err.response) {
+            // client received an error response (5xx, 4xx)
+            console.log("5xx, 4xx error");
+          } else if (err.request) {
+            // client never received a response, or request never left
+            console.log(
+              "client never received response, or request never left"
+            );
+          } else {
+            // anything else
+            console.log(err);
+            console.log("other error");
+          }
+        });
     };
-    if (loading) {
-      fetchData().then(setLoading(false));
-    }
-    if (filter) {
-      setFilter(false);
-    }
+
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading, filter]);
+  }, []);
 
   const filterItem = (curcat, filter) => {
     var newItem = [];
@@ -145,16 +142,16 @@ export default function Home() {
       });
     }
     setFilterRes(newItem);
-    setFilter(true);
   };
 
   async function handleUpvote(docId, numUpvotes) {
+    setIsLoading(true);
     const data = {};
     data["docId"] = docId;
     data["numUpvotes"] = numUpvotes + 1;
     await axios
       .put("/api/upvote", data)
-      .then(setLoading(true))
+      .then(setIsLoading(false))
       .catch((err) => {
         if (err.response) {
           // client received an error response (5xx, 4xx)
@@ -178,21 +175,18 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          sustainable products, DIYs, reviews, and lowest prices
-        </h1>
-
-        <p className={styles.description}>
-          <code className={styles.code}>Scroll or filter to find</code>
-        </p>
-
-        {/* <div className={styles.searchBarContainer}>
+        <div className={styles.intro}>
+          <h1 className={styles.title}>
+            sustainable products, DIYs, reviews, and lowest prices
+          </h1>
+          <p className={styles.description}>
+            <code className={styles.code}>Scroll or filter to find</code>
+          </p>
+          {/* <div className={styles.searchBarContainer}>
           <input className={styles.searchBar} placeholder="Product name" />
-        </div>
-        <p>or</p> */}
-        {/* <div className={styles.searchBarContainer}>
-          <input className={styles.searchBar} placeholder="UPC Code" />
         </div> */}
+        </div>
+
         <div className={styles.filterOptionsContainer}>
           <a
             className={styles.filterOption}
@@ -342,15 +336,6 @@ export default function Home() {
             <p>Woman owned 🧘‍♀️</p>
             {womanOwned && <MdCancel style={{ marginLeft: 9, fontSize: 18 }} />}
           </a>
-          {/* <a
-            className={styles.filterOption}
-            onClick={() => {
-              setBlog(!blog);
-            }}
-          >
-            <p>Blog ⌨️</p>
-            {blog && <MdCancel style={{ marginLeft: 9, fontSize: 18 }} />}
-          </a> */}
           <a
             className={styles.filterOption}
             onClick={() => {
@@ -373,13 +358,11 @@ export default function Home() {
           </a>
         </div>
         <h4>Showing {filterRes.length} results:</h4>
-        <div className={styles.grid}>
-          {loading ? (
-            <div>
-              <p>loading...</p>
-            </div>
-          ) : (
-            filterRes.map((item) => (
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <div className={styles.grid}>
+            {filterRes.map((item) => (
               <div className={styles.card} key={item.id}>
                 {item.verified ? (
                   <div>
@@ -562,9 +545,9 @@ export default function Home() {
                   </p>
                 )}
               </div>
-            ))
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );
