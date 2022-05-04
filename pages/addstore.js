@@ -72,19 +72,15 @@ export default function AddStore() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>Add a store</h1>
-
-        <div className={styles.description}>
-          <div style={{ marginBottom: 20 }}>
-            <code className={styles.code}>
-              Add a store that's sustainable and write about it
-            </code>
-          </div>
-        </div>
         {submitted ? (
           <div>
             <h3>
               Thanks! Your submission will get a quick lookover and will show up
-              on the homepage after verification.
+              on the{" "}
+              <a style={{ textDecoration: "underline" }} href="/">
+                homepage
+              </a>
+              after verification.
             </h3>
           </div>
         ) : (

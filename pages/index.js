@@ -9,7 +9,7 @@ import axios from "axios";
 import Spinner from "../comps/spinner";
 
 export default function Home() {
-  const [votes, setVotes] = useState(0);
+  const [voted, setVoted] = useState(false);
   const [filterArray, setFilterArray] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState(false);
@@ -62,9 +62,9 @@ export default function Home() {
         });
     };
 
-    fetchData();
+    fetchData().then(setVoted(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [voted]);
 
   const filterItem = (curcat, filter) => {
     var newItem = [];
@@ -145,13 +145,12 @@ export default function Home() {
   };
 
   async function handleUpvote(docId, numUpvotes) {
-    setIsLoading(true);
     const data = {};
     data["docId"] = docId;
     data["numUpvotes"] = numUpvotes + 1;
     await axios
       .put("/api/upvote", data)
-      .then(setIsLoading(false))
+      .then(setVoted(true))
       .catch((err) => {
         if (err.response) {
           // client received an error response (5xx, 4xx)
@@ -177,8 +176,20 @@ export default function Home() {
       <main className={styles.main}>
         <div className={styles.intro}>
           <h1 className={styles.title}>
-            sustainable products, DIYs, reviews, and lowest prices
+            Find sustainable products, DIYs, and stores.
           </h1>
+          <p
+            style={{
+              fontFamily: "Open Sans",
+              fontWeight: 500,
+              margin: 0,
+              marginTop: 6,
+              fontSize: 14.5,
+              color: "grey",
+            }}
+          >
+            A community-sourced sustainability board.
+          </p>
           <p className={styles.description}>
             <code className={styles.code}>Scroll or filter to find</code>
           </p>
@@ -357,25 +368,23 @@ export default function Home() {
             {store && <MdCancel style={{ marginLeft: 9, fontSize: 18 }} />}
           </a>
         </div>
-        <h4>Showing {filterRes.length} results:</h4>
+        <h4 style={{ fontWeight: 500, fontStyle: "Open Sans" }}>
+          Showing {filterRes.length} results:
+        </h4>
         {isLoading ? (
           <Spinner />
         ) : (
           <div className={styles.grid}>
             {filterRes.map((item) => (
-              <div className={styles.card} key={item.id}>
+              <a className={styles.card} key={item.id} href={"/"}>
                 {item.verified ? (
                   <div>
                     <a className={styles.typeOfSubmission}>
                       {item.type.charAt(0).toUpperCase() + item.type.slice(1)}
                     </a>
-                    {item.image ? (
-                      <img
-                        className={styles.image}
-                        src="https://i5.walmartimages.com/asr/6b7517c1-4481-465f-be40-783825c5bf98.83395a641145f9b0138468d10b4134b0.jpeg?odnHeight=450&odnWidth=450&odnBg=ffffff"
-                      />
+                    {item.image_url ? (
+                      <img className={styles.image} src={item.image_url} />
                     ) : null}
-
                     <div className={styles.titleAndVotes}>
                       <div className={styles.votes}>
                         <BsFillCaretUpFill
@@ -388,7 +397,13 @@ export default function Home() {
                       </div>
                       <div className={styles.companyAndDetailsContainer}>
                         {item.storename && item.type == "product" ? (
-                          <p style={{ color: "grey", marginLeft: 17 }}>
+                          <p
+                            style={{
+                              color: "grey",
+                              marginLeft: 17,
+                              fontSize: 14,
+                            }}
+                          >
                             {item.storename}
                           </p>
                         ) : null}
@@ -407,6 +422,7 @@ export default function Home() {
                               textOverflow: "ellipsis",
                               whiteSpace: "nowrap",
                               overflow: "hidden",
+                              fontWeight: 600,
                             }}
                           >
                             {item.URL}
@@ -456,7 +472,15 @@ export default function Home() {
                       </div>
                     ) : null}
                     {item.description ? (
-                      <p style={{ marginTop: 10, color: "#575757" }}>
+                      <p
+                        style={{
+                          marginTop: 10,
+                          marginLeft: 2.5,
+                          color: "#575757",
+                          fontFamily: "Open Sans",
+                          fontSize: 14.5,
+                        }}
+                      >
                         {item.description.charAt(0).toUpperCase() +
                           item.description.slice(1)}
                       </p>
@@ -464,76 +488,76 @@ export default function Home() {
                     <div className={styles.productTagsContainer}>
                       {item.kitchen ? (
                         <div className={styles.productTag}>
-                          <p style={{ fontSize: 14 }}>Kitchen 🍽 🧽 </p>
+                          <p style={{ fontSize: 13 }}>Kitchen 🍽 🧽 </p>
                         </div>
                       ) : null}
                       {item.foodBeverages ? (
                         <div className={styles.productTag}>
-                          <p style={{ fontSize: 14 }}>
+                          <p style={{ fontSize: 13 }}>
                             Food {"&"} beverages 🍯 🥬 🍳
                           </p>
                         </div>
                       ) : null}
                       {item.showerBath ? (
                         <div className={styles.productTag}>
-                          <p style={{ fontSize: 14 }}>
+                          <p style={{ fontSize: 13 }}>
                             Shower {"&"} bath 🛁 🧼 🚽
                           </p>
                         </div>
                       ) : null}
                       {item.laundry ? (
                         <div className={styles.productTag}>
-                          <p style={{ fontSize: 14 }}>Laundry 🧺</p>
+                          <p style={{ fontSize: 13 }}>Laundry 🧺</p>
                         </div>
                       ) : null}
                       {item.clothing ? (
                         <div className={styles.productTag}>
-                          <p style={{ fontSize: 14 }}>Clothing 👗👕👒</p>
+                          <p style={{ fontSize: 13 }}>Clothing 👗👕👒</p>
                         </div>
                       ) : null}
                       {item.selfCare ? (
                         <div className={styles.productTag}>
-                          <p style={{ fontSize: 14 }}>Self care 🧴</p>
+                          <p style={{ fontSize: 13 }}>Self care 🧴</p>
                         </div>
                       ) : null}
                       {item.bedroom ? (
                         <div className={styles.productTag}>
-                          <p style={{ fontSize: 14 }}>Bedroom 🛏</p>
+                          <p style={{ fontSize: 13 }}>Bedroom 🛏</p>
                         </div>
                       ) : null}
                       {item.coop ? (
                         <div className={styles.productTag}>
-                          <p style={{ fontSize: 14 }}>Co-op 🤲</p>
+                          <p style={{ fontSize: 13 }}>Co-op 🤲</p>
                         </div>
                       ) : null}
                       {item.organic ? (
                         <div className={styles.productTag}>
-                          <p style={{ fontSize: 14 }}>Organic 🌎</p>
+                          <p style={{ fontSize: 13 }}>Organic 🌎</p>
                         </div>
                       ) : null}
                       {item.carbonNeutral ? (
                         <div className={styles.productTag}>
-                          <p style={{ fontSize: 14 }}>Carbon neutral 🍃</p>
+                          <p style={{ fontSize: 13 }}>Carbon neutral 🍃</p>
                         </div>
                       ) : null}
                       {item.plasticFree ? (
                         <div className={styles.productTag}>
-                          <p style={{ fontSize: 14 }}>Plastic free ♻️</p>
+                          <p style={{ fontSize: 13 }}>Plastic free ♻️</p>
                         </div>
                       ) : null}
                       {item.living ? (
                         <div className={styles.productTag}>
-                          <p style={{ fontSize: 14 }}>Living 🛋</p>
+                          <p style={{ fontSize: 13 }}>Living 🛋</p>
                         </div>
                       ) : null}
                       {item.womanOwned ? (
                         <div className={styles.productTag}>
-                          <p style={{ fontSize: 14 }}>Woman owned 🧘‍♀️</p>
+                          <p style={{ fontSize: 13 }}>Woman owned 🧘‍♀️</p>
                         </div>
                       ) : null}
                       {item.familyOwned ? (
                         <div className={styles.productTag}>
-                          <p style={{ fontSize: 14 }}>Family owned 👨‍👩‍👦</p>
+                          <p style={{ fontSize: 13 }}>Family owned 👨‍👩‍👦</p>
                         </div>
                       ) : null}
                     </div>
@@ -544,7 +568,7 @@ export default function Home() {
                     {item.created.substring(0, 10)}
                   </p>
                 )}
-              </div>
+              </a>
             ))}
           </div>
         )}

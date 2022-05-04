@@ -67,17 +67,14 @@ export default function AddDIY() {
       <main className={styles.main}>
         <h1 className={styles.title}>Add a DIY item</h1>
 
-        <div className={styles.description}>
-          <div style={{ marginBottom: 20 }}>
-            <code className={styles.code}>
-              Fill out details below to add your sustainable DIY
-            </code>
-          </div>
-        </div>
         {submitted ? (
           <h3>
             Thanks! Your submission will get a quick lookover and will show up
-            on the homepage after verification.
+            on the{" "}
+            <a style={{ textDecoration: "underline" }} href="/">
+              homepage
+            </a>
+            after verification.
           </h3>
         ) : (
           <div className={styles.formContainer}>
@@ -251,9 +248,18 @@ export default function AddDIY() {
                 </a>
               </div>
               <h2>6. Image (COMING SOON)</h2>
-              <p>(Optional) Upload an image.</p>
+              <p>
+                Sorry, for now you can't upload any images. I'll try to get this
+                working ASAP!
+              </p>
+              {/* <p>(Optional) Upload an image.</p> */}
               <div className={styles.inputContainer}>
-                {/* <input type="file" name="image" className={styles.image} /> */}
+                <input
+                  type="file"
+                  name="image"
+                  className={styles.image}
+                  accept="image/x-png,image/gif,image/jpeg"
+                />
               </div>
               <button className={styles.submitButton} type="submit">
                 Submit

@@ -5,6 +5,9 @@ import { MdCancel } from "react-icons/md";
 import axios from "axios";
 
 export default function AddItem() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [uploadedImage, setUploadedImage] = useState(null);
+  const [createObjectURL, setCreateObjectURL] = useState(null);
   const [kitchen, setKitchen] = useState(false);
   const [foodBeverages, setFoodBeverages] = useState(false);
   const [showerBath, setShowerBath] = useState(false);
@@ -21,8 +24,18 @@ export default function AddItem() {
   const [familyOwned, setFamilyOwned] = useState(false);
   const [carbonNeutral, setCarbonNeutral] = useState(false);
 
+  const uploadToClient = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      const i = event.target.files[0];
+
+      setUploadedImage(i);
+      setCreateObjectURL(URL.createObjectURL(i));
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
 
     const formData = new FormData(event.target);
     const data = {};
@@ -44,8 +57,24 @@ export default function AddItem() {
     data["carbonNeutral"] = carbonNeutral;
     data["type"] = "product";
 
+    if (uploadedImage) {
+      const pictureData = new FormData();
+      pictureData.append("file", uploadedImage);
+      pictureData.append("upload_preset", "v1-sustainablereviews");
+      const res = await fetch(
+        "https://api.cloudinary.com/v1_1/sustainablereviews/image/upload",
+        {
+          method: "POST",
+          body: pictureData,
+        }
+      ).then((r) => r.json());
+
+      data["imageUrl"] = res["secure_url"];
+    }
+
     await axios
       .put("/api/additem", data)
+      .then(setIsLoading(false))
       .then(setSubmitted(true))
       .catch((err) => {
         if (err.response) {
@@ -73,14 +102,12 @@ export default function AddItem() {
         <h1 className={styles.title}>Add a product</h1>
 
         <div className={styles.description}>
-          <div style={{ marginBottom: 20 }}>
-            <code className={styles.code}>
-              Fill out details below to add your sustainable choice
-            </code>
-          </div>
           <div>
             <code className={styles.code}>
-              For DIY's, navigate to the "Add DIY" section
+              For DIY's, click{" "}
+              <a style={{ textDecoration: "underline" }} href="/addDIY">
+                here
+              </a>
             </code>
           </div>
         </div>
@@ -88,11 +115,12 @@ export default function AddItem() {
           <div>
             <h3>
               Thanks! Your submission will get a quick lookover and will show up
-              on the homepage after verification.
+              on the{" "}
+              <a style={{ textDecoration: "underline" }} href="/">
+                homepage
+              </a>
+              after verification.
             </h3>
-            <a href="/" className={styles.submitButton}>
-              Home
-            </a>
           </div>
         ) : (
           <div className={styles.formContainer}>
@@ -150,7 +178,7 @@ export default function AddItem() {
                 />
               </div>
               <h2>6. Tags</h2>
-              <p>Select various tags that describe your product best.</p>
+              <p>Select various tags that describe the product best.</p>
               <div className={styles.filterOptionsContainer}>
                 <a
                   className={styles.filterOption}
@@ -305,12 +333,31 @@ export default function AddItem() {
                   )}
                 </a>
               </div>
-              <h2>7. Image (COMING SOON)</h2>
-              <p>(Optional) Upload an image.</p>
+              <h2>7. Image</h2>
+              <p>(Optional)</p>
+              {/* <p>(Optional) Upload an image.</p> */}
               <div className={styles.inputContainer}>
-                <input type="file" name="image" className={styles.image} />
+                <input
+                  type="file"
+                  name="image"
+                  className={styles.image}
+                  accept="image/x-png,image/gif,image/jpeg"
+                  onChange={uploadToClient}
+                />
+                {uploadedImage ? (
+                  <img
+                    style={{ marginTop: 30 }}
+                    src={createObjectURL}
+                    height={200}
+                    width={200}
+                  ></img>
+                ) : null}
               </div>
-              <button className={styles.submitButton} type="submit">
+              <button
+                className={styles.submitButton}
+                type="submit"
+                disabled={isLoading}
+              >
                 Submit
               </button>
             </form>
