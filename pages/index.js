@@ -376,14 +376,18 @@ export default function Home() {
         ) : (
           <div className={styles.grid}>
             {filterRes.map((item) => (
-              <a className={styles.card} key={item.id} href={"/"}>
+              <a className={styles.card} key={item.id}>
                 {item.verified ? (
                   <div>
                     <a className={styles.typeOfSubmission}>
                       {item.type.charAt(0).toUpperCase() + item.type.slice(1)}
                     </a>
                     {item.image_url ? (
-                      <img className={styles.image} src={item.image_url} />
+                      <img
+                        className={styles.image}
+                        src={item.image_url}
+                        alt="Image describing either a store product or a DIY product."
+                      />
                     ) : null}
                     <div className={styles.titleAndVotes}>
                       <div className={styles.votes}>
@@ -451,6 +455,7 @@ export default function Home() {
                           <a
                             href={item.productLink}
                             target="_blank"
+                            rel="noreferrer"
                             className={styles.buyNowButton}
                           >
                             Buy
@@ -464,6 +469,7 @@ export default function Home() {
                           <a
                             href={item.URL}
                             target="_blank"
+                            rel="noreferrer"
                             className={styles.buyNowButton}
                           >
                             Visit
