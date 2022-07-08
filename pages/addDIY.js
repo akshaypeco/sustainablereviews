@@ -118,8 +118,8 @@ export default function AddDIY() {
               </div>
               <h2>2. Alternative to...?</h2>
               <p>
-                What did this product replace for you? A response could be "Tide
-                Pods" or "Detergent".
+                What did this product replace for you? A response could be Tide
+                Pods or Detergent.
               </p>
               <div className={styles.inputContainer}>
                 <input

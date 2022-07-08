@@ -430,6 +430,7 @@ export default function Home() {
                       ) : null}
                       {item.image_url ? (
                         <Link
+                          passHref
                           href={{
                             pathname: "/details",
                             query: { docId: item.id },
@@ -455,6 +456,7 @@ export default function Home() {
                         <div className={styles.companyAndDetailsContainer}>
                           {item.storename && item.type == "product" ? (
                             <Link
+                              passHref
                               href={{
                                 pathname: "/details",
                                 query: { docId: item.id },
@@ -483,6 +485,7 @@ export default function Home() {
                           ) : null}
                           {item.storename && item.type == "store" ? (
                             <Link
+                              passHref
                               href={{
                                 pathname: "/details",
                                 query: { docId: item.id },
@@ -493,6 +496,7 @@ export default function Home() {
                           ) : null}
                           {item.URL && item.type == "store" ? (
                             <Link
+                              passHref
                               href={{
                                 pathname: "/details",
                                 query: { docId: item.id },
@@ -511,6 +515,7 @@ export default function Home() {
                           ) : null}
                           {item.materials ? (
                             <Link
+                              passHref
                               href={{
                                 pathname: "/details",
                                 query: { docId: item.id },
@@ -543,6 +548,7 @@ export default function Home() {
                       ) : null} */}
                       {item.cost && item.type != "DIY" ? (
                         <Link
+                          passHref
                           href={{
                             pathname: "/details",
                             query: { docId: item.id },
@@ -554,6 +560,7 @@ export default function Home() {
                       {item.websiteCost ? <h3>{item.websiteCost}</h3> : null}
                       {item.description && item.description.length > 500 ? (
                         <Link
+                          passHref
                           href={{
                             pathname: "/details",
                             query: { docId: item.id },
@@ -577,6 +584,7 @@ export default function Home() {
                       ) : null}
                       {item.description && item.description.length <= 500 ? (
                         <Link
+                          passHref
                           href={{
                             pathname: "/details",
                             query: { docId: item.id },
@@ -675,6 +683,7 @@ export default function Home() {
                       </div>
                       <div className={styles.commentsContainer}>
                         <Link
+                          passHref
                           href={{
                             pathname: "/details",
                             query: { docId: item.id },
