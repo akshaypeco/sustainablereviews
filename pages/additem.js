@@ -127,19 +127,28 @@ export default function AddItem() {
           <div className={styles.formContainer}>
             <form className={styles.form} onSubmit={handleSubmit}>
               <h2>1. Name of product</h2>
-              <p>
-                {"Doesn't"} have to be the {"company's"} product name.
-              </p>
               <div className={styles.inputContainer}>
                 <input
                   type={"text"}
                   name="product"
-                  placeholder="Vanilla Bar Soap"
                   className={styles.nameOfProduct}
                   required
                 />
               </div>
-              <h2>2. Store name</h2>
+              <h2>2. Alternative to...?</h2>
+              <p>
+                What did this product replace for you? A response could be "Tide
+                Pods" or "Detergent".
+              </p>
+              <div className={styles.inputContainer}>
+                <input
+                  type={"text"}
+                  name="alternative"
+                  className={styles.nameOfProduct}
+                  required
+                />
+              </div>
+              <h2>3. Store name</h2>
               <div className={styles.inputContainer}>
                 <input
                   type={"text"}
@@ -148,7 +157,7 @@ export default function AddItem() {
                   required
                 />
               </div>
-              <h2>3. Product link</h2>
+              <h2>4. Product link</h2>
               <div className={styles.inputContainer}>
                 <input
                   type={"url"}
@@ -157,7 +166,7 @@ export default function AddItem() {
                   required
                 />
               </div>
-              <h2>4. Cost</h2>
+              <h2>5. Cost</h2>
               <p>In US dollars.</p>
               <div className={styles.inputContainer}>
                 <input
@@ -169,18 +178,19 @@ export default function AddItem() {
                   className={styles.costInput}
                 />
               </div>
-              <h2>5. Description</h2>
+              <h2>6. Description</h2>
               <p>
-                (Optional) Tell others what this is and why {"it's"}{" "}
-                sustainable. Write as little or as much as you like!
+                Tell others what this is and why {"it's"} sustainable. Write as
+                little or as much as you like!
               </p>
               <div className={styles.inputContainer}>
                 <textarea
                   name="description"
                   className={styles.inputDescription}
+                  required
                 />
               </div>
-              <h2>6. Tags</h2>
+              <h2>7. Tags</h2>
               <p>Select various tags that describe the product best.</p>
               <div className={styles.filterOptionsContainer}>
                 <a
@@ -336,9 +346,8 @@ export default function AddItem() {
                   )}
                 </a>
               </div>
-              <h2>7. Image</h2>
+              <h2>8. Image</h2>
               <p>(Optional)</p>
-              {/* <p>(Optional) Upload an image.</p> */}
               <div className={styles.inputContainer}>
                 <input
                   type="file"

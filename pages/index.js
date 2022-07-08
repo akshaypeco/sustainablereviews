@@ -7,6 +7,7 @@ import { BsFillCaretDownFill } from "react-icons/bs";
 import { BsFillCaretUpFill } from "react-icons/bs";
 import axios from "axios";
 import Spinner from "../comps/spinner";
+import Link from "next/link";
 
 export default function Home() {
   const [voted, setVoted] = useState(false);
@@ -32,6 +33,7 @@ export default function Home() {
   const [carbonNeutral, setCarbonNeutral] = useState(false);
   const [product, setProduct] = useState(false);
   const [store, setStore] = useState(false);
+  const [diy, setDiy] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -86,6 +88,7 @@ export default function Home() {
       setCarbonNeutral(false);
       setProduct(false);
       setStore(false);
+      setDiy(false);
     } else {
       newItem = filterRes.filter((newVal) => {
         if (filter == "kitchen") {
@@ -178,29 +181,65 @@ export default function Home() {
 
       <main className={styles.main}>
         <div className={styles.intro}>
-          <h1 className={styles.title}>
-            Find sustainable products, DIYs, and stores.
-          </h1>
+          <h1 className={styles.title}>Sustainable alternatives</h1>
           <p
             style={{
               fontFamily: "Open Sans",
               fontWeight: 500,
               margin: 0,
               marginTop: 6,
-              fontSize: 14.5,
+              marginBottom: 30,
+              fontSize: 16,
               color: "grey",
             }}
           >
-            A community-sourced sustainability board.
+            A community jumpboard into a low-carbon lifestyle.
           </p>
-          <p className={styles.description}>
+          {/* <p className={styles.description}>
             <code className={styles.code}>Scroll or filter to find</code>
-          </p>
+          </p> */}
           {/* <div className={styles.searchBarContainer}>
           <input className={styles.searchBar} placeholder="Product name" />
         </div> */}
         </div>
-
+        <div className={styles.description}>
+          <p className={styles.code}>Post</p>
+        </div>
+        <div className={styles.filterOptionsContainer}>
+          <a
+            className={styles.filterOption}
+            onClick={() => {
+              setProduct(!product);
+              filterItem(!product, "product");
+            }}
+          >
+            <p>Product 📦</p>
+            {product && <MdCancel style={{ marginLeft: 9, fontSize: 18 }} />}
+          </a>
+          <a
+            className={styles.filterOption}
+            onClick={() => {
+              setStore(!store);
+              filterItem(!store, "store");
+            }}
+          >
+            <p>Store 🏪</p>
+            {store && <MdCancel style={{ marginLeft: 9, fontSize: 18 }} />}
+          </a>
+          <a
+            className={styles.filterOption}
+            onClick={() => {
+              setDiy(!diy);
+              filterItem(!diy, "DIY");
+            }}
+          >
+            <p>DIY 🧶</p>
+            {diy && <MdCancel style={{ marginLeft: 9, fontSize: 18 }} />}
+          </a>
+        </div>
+        <div className={styles.description}>
+          <p className={styles.code}>Category</p>
+        </div>
         <div className={styles.filterOptionsContainer}>
           <a
             className={styles.filterOption}
@@ -277,6 +316,25 @@ export default function Home() {
           <a
             className={styles.filterOption}
             onClick={() => {
+              setLiving(!living);
+              filterItem(!living, "living");
+            }}
+          >
+            <p>Living 🛋</p>
+            {living && <MdCancel style={{ marginLeft: 9, fontSize: 18 }} />}
+          </a>
+        </div>
+        {/* <div className={styles.description}>
+          <p className={styles.code}>Ingredients</p>
+        </div>
+        <div className={styles.filterOptionsContainer}></div> */}
+        <div className={styles.description}>
+          <p className={styles.code}>Social Good</p>
+        </div>
+        <div className={styles.filterOptionsContainer}>
+          <a
+            className={styles.filterOption}
+            onClick={() => {
               setCoop(!coop);
               filterItem(!coop, "coop");
             }}
@@ -321,16 +379,6 @@ export default function Home() {
           <a
             className={styles.filterOption}
             onClick={() => {
-              setLiving(!living);
-              filterItem(!living, "living");
-            }}
-          >
-            <p>Living 🛋</p>
-            {living && <MdCancel style={{ marginLeft: 9, fontSize: 18 }} />}
-          </a>
-          <a
-            className={styles.filterOption}
-            onClick={() => {
               setFamilyOwned(!familyOwned);
               filterItem(!familyOwned, "familyOwned");
             }}
@@ -350,235 +398,304 @@ export default function Home() {
             <p>Woman owned 🧘‍♀️</p>
             {womanOwned && <MdCancel style={{ marginLeft: 9, fontSize: 18 }} />}
           </a>
-          <a
-            className={styles.filterOption}
-            onClick={() => {
-              setProduct(!product);
-              filterItem(!product, "product");
-            }}
-          >
-            <p>Product 👓</p>
-            {product && <MdCancel style={{ marginLeft: 9, fontSize: 18 }} />}
-          </a>
-          <a
-            className={styles.filterOption}
-            onClick={() => {
-              setStore(!store);
-              filterItem(!store, "store");
-            }}
-          >
-            <p>Store 🖥</p>
-            {store && <MdCancel style={{ marginLeft: 9, fontSize: 18 }} />}
-          </a>
         </div>
-        <h4 style={{ fontWeight: 500, fontStyle: "Open Sans" }}>
-          Showing {filterRes.length} results:
+
+        <h4 style={{ fontWeight: 600, fontStyle: "Open Sans", margin: 0 }}>
+          {filterRes.length} results:
         </h4>
+        <p className={styles.disclaimer}>
+          No personal data collection or ads, and everything is completely
+          anonymous. Descriptions might be edited to improve detail, but never
+          to remove opinion.
+        </p>
         {isLoading ? (
           <Spinner />
         ) : (
           <div className={styles.grid}>
             {filterRes.map((item) => (
-              <a className={styles.card} key={item.id}>
-                {item.verified ? (
-                  <div>
-                    <a className={styles.typeOfSubmission}>
-                      {item.type.charAt(0).toUpperCase() + item.type.slice(1)}
-                    </a>
-                    {item.image_url ? (
-                      <img
-                        className={styles.image}
-                        src={item.image_url}
-                        alt="Image describing either a store product or a DIY product."
-                      />
-                    ) : null}
-                    <div className={styles.titleAndVotes}>
-                      <div className={styles.votes}>
-                        <BsFillCaretUpFill
-                          className={styles.upvote}
-                          onClick={() => {
-                            handleUpvote(item.id, item.upvotes);
+              <div key={item.id}>
+                <div className={styles.card}>
+                  {item.verified ? (
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                      <div className={styles.typeOfSubmission}>
+                        <p>
+                          {item.type.charAt(0).toUpperCase() +
+                            item.type.slice(1)}
+                        </p>
+                      </div>
+                      {item.alternative ? (
+                        <div className={styles.alternative}>
+                          <p> Alternative to: {item.alternative}</p>
+                        </div>
+                      ) : null}
+                      {item.image_url ? (
+                        <Link
+                          href={{
+                            pathname: "/details",
+                            query: { docId: item.id },
                           }}
-                        />
-                        <h4>{item.upvotes}</h4>
+                        >
+                          <img
+                            className={styles.image}
+                            src={item.image_url}
+                            alt="Image describing either a store product or a DIY product."
+                          />
+                        </Link>
+                      ) : null}
+                      <div className={styles.titleAndVotes}>
+                        <div className={styles.votes}>
+                          <BsFillCaretUpFill
+                            className={styles.upvote}
+                            onClick={() => {
+                              handleUpvote(item.id, item.upvotes);
+                            }}
+                          />
+                          <h4>{item.upvotes}</h4>
+                        </div>
+                        <div className={styles.companyAndDetailsContainer}>
+                          {item.storename && item.type == "product" ? (
+                            <Link
+                              href={{
+                                pathname: "/details",
+                                query: { docId: item.id },
+                              }}
+                            >
+                              <p
+                                style={{
+                                  color: "grey",
+                                  marginLeft: 17,
+                                  fontSize: 14.5,
+                                }}
+                              >
+                                {item.storename}
+                              </p>
+                            </Link>
+                          ) : null}
+                          {item.product_name ? (
+                            <Link
+                              href={{
+                                pathname: "/details",
+                                query: { docId: item.id },
+                              }}
+                            >
+                              <h2>{item.product_name}</h2>
+                            </Link>
+                          ) : null}
+                          {item.storename && item.type == "store" ? (
+                            <Link
+                              href={{
+                                pathname: "/details",
+                                query: { docId: item.id },
+                              }}
+                            >
+                              <h2>{item.storename}</h2>
+                            </Link>
+                          ) : null}
+                          {item.URL && item.type == "store" ? (
+                            <Link
+                              href={{
+                                pathname: "/details",
+                                query: { docId: item.id },
+                              }}
+                            >
+                              <p
+                                style={{
+                                  color: "grey",
+                                  marginLeft: 17,
+                                  fontWeight: 600,
+                                }}
+                              >
+                                {item.URL}
+                              </p>
+                            </Link>
+                          ) : null}
+                          {item.materials ? (
+                            <Link
+                              href={{
+                                pathname: "/details",
+                                query: { docId: item.id },
+                              }}
+                            >
+                              <p
+                                style={{
+                                  color: "grey",
+                                  marginLeft: 17,
+                                  fontWeight: 600,
+                                }}
+                              >
+                                {item.materials}
+                              </p>
+                            </Link>
+                          ) : null}
+                        </div>
                       </div>
-                      <div className={styles.companyAndDetailsContainer}>
-                        {item.storename && item.type == "product" ? (
+                      {/* {item.cost && item.type == "DIY" ? (
+                        <Link
+                          href={{
+                            pathname: "/details",
+                            query: { docId: item.id },
+                          }}
+                        >
+                          <h3>
+                            {"~"} ${item.cost}
+                          </h3>
+                        </Link>
+                      ) : null} */}
+                      {item.cost && item.type != "DIY" ? (
+                        <Link
+                          href={{
+                            pathname: "/details",
+                            query: { docId: item.id },
+                          }}
+                        >
+                          <h3>${item.cost} </h3>
+                        </Link>
+                      ) : null}
+                      {item.websiteCost ? <h3>{item.websiteCost}</h3> : null}
+                      {item.description && item.description.length > 500 ? (
+                        <Link
+                          href={{
+                            pathname: "/details",
+                            query: { docId: item.id },
+                          }}
+                        >
                           <p
                             style={{
-                              color: "grey",
-                              marginLeft: 17,
-                              fontSize: 14,
+                              marginTop: 10,
+                              marginLeft: 2.5,
+                              color: "#575757",
+                              fontFamily: "Open Sans",
+                              fontSize: 14.5,
+                              width: "100%",
                             }}
                           >
-                            {item.storename}
+                            {item.description.charAt(0).toUpperCase() +
+                              item.description.slice(1, 150)}
+                            {"..."}
                           </p>
-                        ) : null}
-
-                        {item.product_name ? (
-                          <h2>{item.product_name}</h2>
-                        ) : null}
-                        {item.storename && item.type == "store" ? (
-                          <h2>{item.storename}</h2>
-                        ) : null}
-                        {item.URL && item.type == "store" ? (
+                        </Link>
+                      ) : null}
+                      {item.description && item.description.length <= 500 ? (
+                        <Link
+                          href={{
+                            pathname: "/details",
+                            query: { docId: item.id },
+                          }}
+                        >
                           <p
                             style={{
-                              color: "grey",
-                              marginLeft: 17,
-                              textOverflow: "ellipsis",
-                              whiteSpace: "nowrap",
-                              overflow: "hidden",
-                              fontWeight: 600,
+                              marginTop: 10,
+                              marginLeft: 2.5,
+                              color: "#575757",
+                              fontFamily: "Open Sans",
+                              fontSize: 14.5,
+                              width: "100%",
                             }}
                           >
-                            {item.URL}
+                            {item.description.charAt(0).toUpperCase() +
+                              item.description.slice(1)}
                           </p>
+                        </Link>
+                      ) : null}
+                      <div className={styles.productTagsContainer}>
+                        {item.kitchen ? (
+                          <div className={styles.productTag}>
+                            <p style={{ fontSize: 13 }}>Kitchen 🍽 🧽 </p>
+                          </div>
                         ) : null}
-                        {item.URL && item.type == "product" ? (
-                          <p
-                            style={{
-                              color: "grey",
-                              marginLeft: 17,
-                              paddingRight: 3,
-                              textOverflow: "ellipsis",
-                              whiteSpace: "nowrap",
-                              overflow: "hidden",
-                            }}
-                          >
-                            {item.productLink}
-                          </p>
+                        {item.foodBeverages ? (
+                          <div className={styles.productTag}>
+                            <p style={{ fontSize: 13 }}>
+                              Food {"&"} beverages 🍯 🥬 🍳
+                            </p>
+                          </div>
                         ) : null}
+                        {item.showerBath ? (
+                          <div className={styles.productTag}>
+                            <p style={{ fontSize: 13 }}>
+                              Shower {"&"} bath 🛁 🧼 🚽
+                            </p>
+                          </div>
+                        ) : null}
+                        {item.laundry ? (
+                          <div className={styles.productTag}>
+                            <p style={{ fontSize: 13 }}>Laundry 🧺</p>
+                          </div>
+                        ) : null}
+                        {item.clothing ? (
+                          <div className={styles.productTag}>
+                            <p style={{ fontSize: 13 }}>Clothing 👗👕👒</p>
+                          </div>
+                        ) : null}
+                        {item.selfCare ? (
+                          <div className={styles.productTag}>
+                            <p style={{ fontSize: 13 }}>Self care 🧴</p>
+                          </div>
+                        ) : null}
+                        {item.bedroom ? (
+                          <div className={styles.productTag}>
+                            <p style={{ fontSize: 13 }}>Bedroom 🛏</p>
+                          </div>
+                        ) : null}
+                        {item.coop ? (
+                          <div className={styles.productTag}>
+                            <p style={{ fontSize: 13 }}>Co-op 🤲</p>
+                          </div>
+                        ) : null}
+                        {item.organic ? (
+                          <div className={styles.productTag}>
+                            <p style={{ fontSize: 13 }}>Organic 🌎</p>
+                          </div>
+                        ) : null}
+                        {item.carbonNeutral ? (
+                          <div className={styles.productTag}>
+                            <p style={{ fontSize: 13 }}>Carbon neutral 🍃</p>
+                          </div>
+                        ) : null}
+                        {item.plasticFree ? (
+                          <div className={styles.productTag}>
+                            <p style={{ fontSize: 13 }}>Plastic free ♻️</p>
+                          </div>
+                        ) : null}
+                        {item.living ? (
+                          <div className={styles.productTag}>
+                            <p style={{ fontSize: 13 }}>Living 🛋</p>
+                          </div>
+                        ) : null}
+                        {item.womanOwned ? (
+                          <div className={styles.productTag}>
+                            <p style={{ fontSize: 13 }}>Woman owned 🧘‍♀️</p>
+                          </div>
+                        ) : null}
+                        {item.familyOwned ? (
+                          <div className={styles.productTag}>
+                            <p style={{ fontSize: 13 }}>Family owned 👨‍👩‍👦</p>
+                          </div>
+                        ) : null}
+                      </div>
+                      <div className={styles.commentsContainer}>
+                        <Link
+                          href={{
+                            pathname: "/details",
+                            query: { docId: item.id },
+                          }}
+                        >
+                          {item.numComments == 0 ? (
+                            <p>No comments</p>
+                          ) : (
+                            <p>{item.numComments} comments</p>
+                          )}
+                        </Link>
                       </div>
                     </div>
-                    {item.cost ? <h3>${item.cost}+ </h3> : null}
-                    {item.websiteCost ? <h3>{item.websiteCost}</h3> : null}
-                    {item.productLink ? (
-                      <div className={styles.buyContainer}>
-                        <div style={{ marginTop: 30, marginBottom: 32 }}>
-                          <a
-                            href={item.productLink}
-                            target="_blank"
-                            rel="noreferrer"
-                            className={styles.buyNowButton}
-                          >
-                            Buy
-                          </a>
-                        </div>
-                      </div>
-                    ) : null}
-                    {item.URL ? (
-                      <div className={styles.buyContainer}>
-                        <div style={{ marginTop: 30, marginBottom: 32 }}>
-                          <a
-                            href={item.URL}
-                            target="_blank"
-                            rel="noreferrer"
-                            className={styles.buyNowButton}
-                          >
-                            Visit
-                          </a>
-                        </div>
-                      </div>
-                    ) : null}
-                    {item.description ? (
-                      <p
-                        style={{
-                          marginTop: 10,
-                          marginLeft: 2.5,
-                          color: "#575757",
-                          fontFamily: "Open Sans",
-                          fontSize: 14.5,
-                        }}
-                      >
-                        {item.description.charAt(0).toUpperCase() +
-                          item.description.slice(1)}
-                      </p>
-                    ) : null}
-                    <div className={styles.productTagsContainer}>
-                      {item.kitchen ? (
-                        <div className={styles.productTag}>
-                          <p style={{ fontSize: 13 }}>Kitchen 🍽 🧽 </p>
-                        </div>
-                      ) : null}
-                      {item.foodBeverages ? (
-                        <div className={styles.productTag}>
-                          <p style={{ fontSize: 13 }}>
-                            Food {"&"} beverages 🍯 🥬 🍳
-                          </p>
-                        </div>
-                      ) : null}
-                      {item.showerBath ? (
-                        <div className={styles.productTag}>
-                          <p style={{ fontSize: 13 }}>
-                            Shower {"&"} bath 🛁 🧼 🚽
-                          </p>
-                        </div>
-                      ) : null}
-                      {item.laundry ? (
-                        <div className={styles.productTag}>
-                          <p style={{ fontSize: 13 }}>Laundry 🧺</p>
-                        </div>
-                      ) : null}
-                      {item.clothing ? (
-                        <div className={styles.productTag}>
-                          <p style={{ fontSize: 13 }}>Clothing 👗👕👒</p>
-                        </div>
-                      ) : null}
-                      {item.selfCare ? (
-                        <div className={styles.productTag}>
-                          <p style={{ fontSize: 13 }}>Self care 🧴</p>
-                        </div>
-                      ) : null}
-                      {item.bedroom ? (
-                        <div className={styles.productTag}>
-                          <p style={{ fontSize: 13 }}>Bedroom 🛏</p>
-                        </div>
-                      ) : null}
-                      {item.coop ? (
-                        <div className={styles.productTag}>
-                          <p style={{ fontSize: 13 }}>Co-op 🤲</p>
-                        </div>
-                      ) : null}
-                      {item.organic ? (
-                        <div className={styles.productTag}>
-                          <p style={{ fontSize: 13 }}>Organic 🌎</p>
-                        </div>
-                      ) : null}
-                      {item.carbonNeutral ? (
-                        <div className={styles.productTag}>
-                          <p style={{ fontSize: 13 }}>Carbon neutral 🍃</p>
-                        </div>
-                      ) : null}
-                      {item.plasticFree ? (
-                        <div className={styles.productTag}>
-                          <p style={{ fontSize: 13 }}>Plastic free ♻️</p>
-                        </div>
-                      ) : null}
-                      {item.living ? (
-                        <div className={styles.productTag}>
-                          <p style={{ fontSize: 13 }}>Living 🛋</p>
-                        </div>
-                      ) : null}
-                      {item.womanOwned ? (
-                        <div className={styles.productTag}>
-                          <p style={{ fontSize: 13 }}>Woman owned 🧘‍♀️</p>
-                        </div>
-                      ) : null}
-                      {item.familyOwned ? (
-                        <div className={styles.productTag}>
-                          <p style={{ fontSize: 13 }}>Family owned 👨‍👩‍👦</p>
-                        </div>
-                      ) : null}
-                    </div>
-                  </div>
-                ) : (
-                  <p style={{ fontWeight: "500" }}>
-                    Waiting on verification: post created on{" "}
-                    {item.created.substring(0, 10)}
-                  </p>
-                )}
-              </a>
+                  ) : (
+                    <p style={{ fontWeight: "500" }}>
+                      Waiting on verification: post created on{" "}
+                      {item.created.substring(0, 10)}
+                    </p>
+                  )}
+                </div>
+              </div>
             ))}
           </div>
         )}

@@ -1,0 +1,222 @@
+.container {
+    padding: 1.5rem 2rem 1rem 2rem;
+    min-height: 100vh;
+  }
+  
+  .main {
+    padding: 0.75rem 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .storeContainer {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+  }
+
+  .storeContainer h1 {
+    margin: 0;
+    line-height: 2.1rem;
+    font-size: 2rem;
+    font-weight: 600;
+  }
+
+  .storeContainer h2 {
+    margin: 0.2rem 0rem 0.3rem 0rem;
+    font-size: 1.2rem; 
+    font-weight: 600; 
+    color: #656565;
+  }
+
+  .storeContainer h3 {
+    margin: 0;
+    margin-bottom: 0.2rem;
+    font-family: "Open Sans", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 0.9rem;
+  }
+
+  .storeContainer h4 {
+    margin: 0.2rem 0rem 0.3rem 0rem;
+    font-size: 1.5rem; 
+    font-weight: 600; 
+    color: #656565;
+  }
+
+  .storeContainer h5 {
+    margin: 0;
+  }
+
+  .storeContainer p {
+    margin: 0;
+    font-family: "Open Sans", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 0.98rem;
+  }
+
+  .productTagsContainer {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    flex-wrap: wrap;
+    max-width: 500px;
+    margin-top: 0.3rem;
+  }
+
+  .productTag {
+    display: flex;
+    padding: 0.3rem 0.6rem;
+    margin: 0.4rem 0.4rem;
+    border-radius: 10px;
+    box-shadow: 0px 0px 4px #e8e8e8;
+    background-color: rgb(245, 245, 245);
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  
+  .productTag p {
+    margin: 0;
+    font-size: 0.8rem;  
+}
+
+.image {
+  display: block;
+  max-width: 30%;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1rem;
+}
+
+.buyContainer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-right: 1rem;
+  margin-top: 1.5rem;
+}
+
+.buyNowButton {
+  padding: 0.5rem 1.3rem;
+  border-radius: 5px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  background-color: black;
+  color: white;
+  outline: none;
+  border: none;
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+  Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  transition: all ease-in-out 0.10s;
+}
+
+.buyNowButton:hover,
+.buyNowButton:active {
+  background-color: #464646;
+}
+
+.descriptionContainer {
+  margin-top: 2.5rem;
+}
+
+.commentsContainer {
+  margin-top: 2.5rem;
+}
+
+.commentContainer {
+  margin-bottom: 1rem;
+  padding: 0.6rem 1rem;
+  border: #e8e8e8 1px solid;
+}
+
+.commentContainer h2 {
+  font-size: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+.commentContainer h3 {
+  font-size: 0.8rem;
+  margin: 0 0 0 0.4rem;
+  padding: 0;
+  color: grey;
+}
+
+.commentContainer p {
+  font-size: 1rem;
+  margin-top: 0.3rem;
+}
+
+.addComment {
+  display: flex;
+  font-size: 14px;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 1rem;
+  border-top:  rgb(209, 209, 209) 1px solid;
+
+}
+
+.usernameInput {
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  margin-top: 0.3rem;
+  max-width: 400px;
+  font-size: 0.95rem;
+  background: transparent;
+  border: 1px solid rgb(209, 209, 209);
+  outline: none;
+  transition: color 0.10s ease-in-out, border-color 0.10s ease-in-out;
+  border-radius: 2px;
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+  Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+.addCommentInput {
+  padding: 0.5rem;
+  margin-top: 0.3rem;
+  max-width: 750px;
+  font-size: 0.95rem;
+  background: transparent;
+  border: 1px solid rgb(209, 209, 209);
+  outline: none;
+  transition: color 0.10s ease-in-out, border-color 0.10s ease-in-out;
+  border-radius: 2px;
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+  Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+.addCommentInput:hover,
+.usernameInput:hover,
+.addCommentInput:focus,
+.usernameInput:focus {
+  border-color: #696969;
+}
+
+.addCommentButton {
+  cursor: pointer;
+  padding: 0.5rem 0;
+  margin-top: 0.75rem;
+  width: 65px;
+  border-radius: 5px;
+  font-size: 0.90rem;
+  font-weight: bold;
+  background-color: rgb(248, 248, 248);
+  color: rgb(43, 127, 223);
+  outline: none;
+  border: none;
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+  Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+.addCommentButton:hover,
+.addCommentButton:active {
+  background-color: #e8e8e8;
+}
+
+
+@media (max-width: 600px) {
+  .image {
+    max-width: 65%;
+    margin-top: 2rem;
+  }
+}

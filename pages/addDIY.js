@@ -6,6 +6,9 @@ import axios from "axios";
 import Link from "next/link";
 
 export default function AddDIY() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [uploadedImage, setUploadedImage] = useState(null);
+  const [createObjectURL, setCreateObjectURL] = useState(null);
   const [kitchen, setKitchen] = useState(false);
   const [foodBeverages, setFoodBeverages] = useState(false);
   const [showerBath, setShowerBath] = useState(false);
@@ -16,12 +19,21 @@ export default function AddDIY() {
   const [coop, setCoop] = useState(false);
   const [organic, setOrganic] = useState(false);
   const [plasticFree, setPlasticFree] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [living, setLiving] = useState(false);
 
-  const [submitted, setSubmitted] = useState(false);
+  const uploadToClient = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      const i = event.target.files[0];
+
+      setUploadedImage(i);
+      setCreateObjectURL(URL.createObjectURL(i));
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
 
     const formData = new FormData(event.target);
     const data = {};
@@ -40,8 +52,24 @@ export default function AddDIY() {
     data["living"] = living;
     data["type"] = "DIY";
 
+    if (uploadedImage) {
+      const pictureData = new FormData();
+      pictureData.append("file", uploadedImage);
+      pictureData.append("upload_preset", "v1-sustainablereviews");
+      const res = await fetch(
+        "https://api.cloudinary.com/v1_1/sustainablereviews/image/upload",
+        {
+          method: "POST",
+          body: pictureData,
+        }
+      ).then((r) => r.json());
+
+      data["imageUrl"] = res["secure_url"];
+    }
+
     await axios
       .put("/api/addDIY", data)
+      .then(setIsLoading(false))
       .then(setSubmitted(true))
       .catch((err) => {
         if (err.response) {
@@ -66,8 +94,7 @@ export default function AddDIY() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>Add a DIY item</h1>
-
+        <h1 className={styles.title}>Add a DIY or Repurposed item</h1>
         {submitted ? (
           <h3>
             Thanks! Your submission will get a quick lookover and will show up
@@ -89,22 +116,35 @@ export default function AddDIY() {
                   required
                 />
               </div>
-              <h2>2. Materials</h2>
+              <h2>2. Alternative to...?</h2>
               <p>
-                List the materials you use to make this, separated by commas.
+                What did this product replace for you? A response could be "Tide
+                Pods" or "Detergent".
               </p>
               <div className={styles.inputContainer}>
                 <input
                   type={"text"}
-                  name="materials"
-                  placeholder="soap, oil, old pot"
+                  name="alternative"
                   className={styles.nameOfProduct}
                   required
                 />
               </div>
-              <h2>3. Cost</h2>
+              <h2>3. Materials</h2>
               <p>
-                How much does it cost? If {"it's"} DIY, enter an estimation.
+                List the materials you use to make this, separated by commas.
+              </p>
+              <div className={styles.inputContainer}>
+                <textarea
+                  name="materials"
+                  className={styles.inputDescription}
+                  placeholder="1 cup of soap, 1/2 cup of oil, old pot"
+                  required
+                />
+              </div>
+              {/* <h2>4. Cost</h2>
+              <p>
+                How much does it cost in US dollars? Feel free to enter an
+                estimation.
               </p>
               <div className={styles.inputContainer}>
                 <input
@@ -115,16 +155,17 @@ export default function AddDIY() {
                   required
                   className={styles.costInput}
                 />
-              </div>
-              <h2>4. Description</h2>
+              </div> */}
+              <h2>4. Instructions</h2>
               <p>
-                (Optional) Tell others what this is and why {"it's"}{" "}
-                sustainable. Write as little or as much as you like!
+                Tell others what this is and how to do it. Write as little or as
+                much as you like!
               </p>
               <div className={styles.inputContainer}>
                 <textarea
                   name="description"
                   className={styles.inputDescription}
+                  required
                 />
               </div>
               <h2>5. Tags</h2>
@@ -250,21 +291,30 @@ export default function AddDIY() {
                   )}
                 </a>
               </div>
-              <h2>6. Image (COMING SOON)</h2>
-              <p>
-                Sorry, for now you {"can't"} upload any images. {"I'll"} try to
-                get this working ASAP!
-              </p>
-              {/* <p>(Optional) Upload an image.</p> */}
+              <h2>6. Image</h2>
+              <p>(Optional)</p>
               <div className={styles.inputContainer}>
                 <input
                   type="file"
                   name="image"
                   className={styles.image}
                   accept="image/x-png,image/gif,image/jpeg"
+                  onChange={uploadToClient}
                 />
+                {uploadedImage ? (
+                  <img
+                    style={{ marginTop: 30 }}
+                    src={createObjectURL}
+                    height={200}
+                    width={200}
+                  ></img>
+                ) : null}
               </div>
-              <button className={styles.submitButton} type="submit">
+              <button
+                className={styles.submitButton}
+                type="submit"
+                disabled={isLoading}
+              >
                 Submit
               </button>
             </form>

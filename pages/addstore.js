@@ -107,13 +107,14 @@ export default function AddStore() {
               </div>
               <h2>3. Description</h2>
               <p>
-                (Optional) Tell others what this is and why {"it's"}{" "}
-                sustainable. Write as little or as much as you like!
+                Tell others what this is and why {"it's"} sustainable. Write as
+                little or as much as you like!
               </p>
               <div className={styles.inputContainer}>
                 <textarea
                   name="description"
                   className={styles.inputDescription}
+                  required
                 />
               </div>
               <h2>4. Tags</h2>
@@ -272,8 +273,8 @@ export default function AddStore() {
                   )}
                 </a>
               </div>
-              <h2>5. Price range</h2>
-              <p>In beta, this is currently done automatically.</p>
+              {/* <h2>5. Price range</h2>
+              <p>This is currently done after submission.</p> */}
               <button className={styles.submitButton} type="submit">
                 Submit
               </button>
